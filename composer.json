@@ -1,5 +1,5 @@
 {
-    "name": "andrey/smstraffic-for-laravel",
+    "name": "dmitrakovich/smstraffic-for-laravel",
     "description": "SmsTraffic Client for Laravel",
     "type": "library",
     "keywords": ["smstraffic", "laravel"],
