@@ -20,7 +20,12 @@ class SmsTrafficChannelServiceProvider extends ServiceProvider
 
         $this->app->singleton(SmsTraffic::class, function ($app) {
             $config = $app['config']['smstraffic'];
-            return new SmsTraffic($config['login'], $config['password']);
+            return new SmsTraffic(
+                $config['login'],
+                $config['password'],
+                $config['sms_from'],
+                $config['log_channel']
+            );
         });
 
         Notification::resolved(function (ChannelManager $service) {
