@@ -55,13 +55,9 @@ class SmsTraffic
     public function __construct(
         protected string $login,
         protected string $password,
-        protected string $from = null,
-        protected string $logChannel = null,
+        protected string $from = null
     ) {
     }
-
-    // log
-    // set log template (with manager inside)
 
     /**
      * Test
