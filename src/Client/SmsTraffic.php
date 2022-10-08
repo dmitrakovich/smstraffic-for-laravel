@@ -50,6 +50,7 @@ class SmsTraffic
      *
      */
     protected array $defaultOptions = [
+        'rus' => 5,
         'want_sms_ids' => 1,
     ];
 

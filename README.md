@@ -97,6 +97,12 @@ To route SmsTraffic notifications to the proper phone number, define a `routeNot
         }
     }
 
+### Using The SmsTraffic Facade
+
+Alternatively, you may send notifications via the \Illuminate\Notifications\Facades\SmsTraffic facade:
+
+    SmsTraffic::send($phones, $message);
+
 ## Official Documentation
 
 Documentation for Laravel Vonage Notification Channel can be found on the [Laravel website](https://laravel.com/docs/notifications#sms-notifications).
