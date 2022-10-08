@@ -30,4 +30,19 @@ return [
 
     'password' => env('SMSTRAFFIC_PASSWORD'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | SMS "route"
+    |--------------------------------------------------------------------------
+    |
+    | The default route for the current message, set in the format:
+    | <channel>(<ttl>)-<channel>(<ttl>)-…-<channel>(<ttl>)-<channel>.
+    | Example: "viber(60)-sms" in this case the message will be sent to Viber
+    | with delivery waiting time 60 sec. If a the message was not delivered,
+    | it will be sent to SMS.
+    |
+    */
+
+    'route' => env('SMSTRAFFIC_ROUTE'),
+
 ];

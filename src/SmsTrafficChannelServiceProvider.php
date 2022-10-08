@@ -20,15 +20,21 @@ class SmsTrafficChannelServiceProvider extends ServiceProvider
 
         $this->app->singleton(SmsTraffic::class, function ($app) {
             $config = $app['config']['smstraffic'];
-            return new SmsTraffic($config['login'], $config['password'], $config['sms_from']);
+            $client = new SmsTraffic($config['login'], $config['password']);
+
+            if (!empty($config['sms_from'])) {
+                $client->setDefaultOption('originator', $config['sms_from']);
+            }
+            if (!empty($config['route'])) {
+                $client->setDefaultOption('route', $config['route']);
+            }
+
+            return $client;
         });
 
         Notification::resolved(function (ChannelManager $service) {
             $service->extend('smstraffic', function ($app) {
-                return new SmsTrafficChannel(
-                    $app->make(SmsTraffic::class),
-                    $app['config']['smstraffic.sms_from']
-                );
+                return new SmsTrafficChannel($app->make(SmsTraffic::class));
             });
         });
     }

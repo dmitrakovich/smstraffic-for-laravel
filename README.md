@@ -18,6 +18,7 @@ The package includes a [configuration file](https://github.com/dmitrakovich/smst
     SMSTRAFFIC_SMS_FROM=
     SMSTRAFFIC_LOGIN=
     SMSTRAFFIC_PASSWORD=
+    SMSTRAFFIC_ROUTE=
 
 ## Official Documentation
 

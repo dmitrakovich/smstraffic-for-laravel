@@ -18,6 +18,7 @@ class SmsTraffic
      *
      */
     protected const KNOWN_OPTIONS = [
+        'originator' => '',
         'rus' => 0,
         'max_parts' => 255,
         'autotruncate' => 0,
@@ -45,35 +46,49 @@ class SmsTraffic
     /**
      *
      */
-    protected const DEFAULT_OPTIONS = [
+    protected array $defaultOptions = [
         'want_sms_ids' => 1,
     ];
 
     /**
      * Create a new SmsTraffic instance.
      */
-    public function __construct(
-        protected string $login,
-        protected string $password,
-        protected string $from = null
-    ) {
+    public function __construct(protected string $login, protected string $password)
+    {
+    }
+
+    /**
+     * Add default option value
+     */
+    public function setDefaultOption(string $name, string $value): void
+    {
+        if ($this->validateOption($name)) {
+            $this->defaultOptions[$name] = $value;
+        }
+    }
+
+    /**
+     * Check is option name valid
+     */
+    protected function validateOption(string $name): bool
+    {
+        return array_key_exists($name, self::KNOWN_OPTIONS) || str_starts_with('', 'param_');
     }
 
     /**
      * Test
      */
-    public function send(string $message, string $to, array $options = [])
+    public function send(string $to, string $message, array $options = [])
     {
         $payload = [
-            'originator' => $this->from,
-            'phones' => $to, // !!! check foramts
+            'phones' => $this->preparePhones($to),
             'message' => $message,
         ];
-        foreach (self::DEFAULT_OPTIONS as $name => $value) {
+        foreach ($this->defaultOptions as $name => $value) {
             $payload[$name] = $value;
         }
         foreach ($options as $name => $value) {
-            if (array_key_exists($name, self::KNOWN_OPTIONS) || str_starts_with('', 'param_')) {
+            if ($this->validateOption($name)) {
                 $payload[$name] = $value;
             }
         }
@@ -81,6 +96,14 @@ class SmsTraffic
         $response = $this->request($payload);
 
         return $response;
+    }
+
+    /**
+     * Prepare phone numbers for sms traffic
+     */
+    protected function preparePhones(string $phones): string
+    {
+        return preg_replace('/[^0-9,]/', '', $phones);
     }
 
     /**
