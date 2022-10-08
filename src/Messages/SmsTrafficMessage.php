@@ -12,7 +12,7 @@ class SmsTrafficMessage
     /**
      * The phone number the message should be sent from.
      */
-    public string $from;
+    public ?string $from = null;
 
     /**
      * The phone number the message should be sent to.
@@ -22,7 +22,7 @@ class SmsTrafficMessage
     /**
      * The message route.
      */
-    public string $route;
+    public ?string $route = null;
 
     /**
      * Create a new message instance.
