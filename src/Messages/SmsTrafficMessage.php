@@ -17,7 +17,7 @@ class SmsTrafficMessage
     /**
      * The phone number the message should be sent to.
      */
-    public string $to;
+    public ?string $to = null;
 
     /**
      * The message route.
