@@ -2,6 +2,9 @@
 
 namespace Illuminate\Notifications\Client;
 
+use Illuminate\Notifications\Client\Response\SmsTrafficResponse;
+use Illuminate\Notifications\Client\Response\SmsTrafficResponseFactory;
+
 class SmsTraffic
 {
     /**
@@ -76,9 +79,9 @@ class SmsTraffic
     }
 
     /**
-     * Test
+     * Send sms to recipient
      */
-    public function send(string $to, string $message, array $options = [])
+    public function send(string $to, string $message, array $options = []): SmsTrafficResponse
     {
         $payload = [
             'phones' => $this->preparePhones($to),
@@ -93,9 +96,7 @@ class SmsTraffic
             }
         }
 
-        $response = $this->request($payload);
-
-        return $response;
+        return $this->request($payload);
     }
 
     /**
@@ -107,9 +108,9 @@ class SmsTraffic
     }
 
     /**
-     * Test
+     * Send request by SmsTraffic API.
      */
-    protected function request(array $payload)
+    protected function request(array $payload): SmsTrafficResponse
     {
         $client = new \GuzzleHttp\Client();
 
@@ -120,6 +121,28 @@ class SmsTraffic
             ], $payload),
         ];
 
-        return $client->post(self::MAIN_URL, $params);
+        $response = $this->getResponse($client, $params);
+
+        if ($response->hasError() && $response->isServerError()) {
+            $response = $this->getResponse($client, $params, true);
+        }
+
+        return $response;
+    }
+
+    /**
+     * Get response instance.
+     */
+    protected function getResponse(\GuzzleHttp\Client $client, array $params, bool $useBackupUrl = false): SmsTrafficResponse
+    {
+        $url = $useBackupUrl ? self::BACKUP_URL : self::MAIN_URL;
+
+        try {
+            $response = $client->post($url, $params);
+            $rawContent = $response->getBody()->getContents();
+            return SmsTrafficResponseFactory::createResponse($rawContent);
+        } catch (\Throwable $th) {
+            return SmsTrafficResponseFactory::createErrorResponse($th->getMessage());
+        }
     }
 }
