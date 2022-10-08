@@ -100,6 +100,31 @@ class SmsTraffic
     }
 
     /**
+     * Get message status.
+     *
+     * @todo complete in the future
+     */
+    public function status(string $smsId)
+    {
+        $payload = [
+            'operation' => 'status',
+            'sms_id' => $smsId,
+        ];
+    }
+
+    /**
+     * Get balance.
+     *
+     * @todo complete in the future
+     */
+    public function balance()
+    {
+        $payload = [
+            'operation' => 'account',
+        ];
+    }
+
+    /**
      * Prepare phone numbers for sms traffic
      */
     protected function preparePhones(string $phones): string

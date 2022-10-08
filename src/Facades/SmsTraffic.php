@@ -5,6 +5,11 @@ namespace Illuminate\Notifications\Facades;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Notifications\Client\SmsTraffic as SmsTrafficClient;
 
+/**
+ * @method static SmsTrafficResponse send(string $to, string $message, array $options = [])
+ *
+ * @see \Illuminate\Notifications\Client\SmsTraffic
+ */
 class SmsTraffic extends Facade
 {
     /**
