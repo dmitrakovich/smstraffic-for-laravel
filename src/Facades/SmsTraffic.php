@@ -3,6 +3,7 @@
 namespace Illuminate\Notifications\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use Illuminate\Notifications\Client\Response\SmsTrafficResponse;
 use Illuminate\Notifications\Client\SmsTraffic as SmsTrafficClient;
 
 /**

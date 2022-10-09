@@ -99,7 +99,7 @@ class User extends Authenticatable
 ```
 ### Using The SmsTraffic Facade
 
-Alternatively, you may send notifications via the \Illuminate\Notifications\Facades\SmsTraffic facade:
+Alternatively, you may send notifications via the `\Illuminate\Notifications\Facades\SmsTraffic` facade:
 ```php
 SmsTraffic::send($phones, $message);
 ```
