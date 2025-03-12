@@ -1,5 +1,9 @@
 # Release Notes
 
+## 0.3.0 (2025-03-12)
+
+* Laravel 12.x Support
+
 ## 0.2.0 (2024-03-31)
 
 * Laravel 11.x Support
