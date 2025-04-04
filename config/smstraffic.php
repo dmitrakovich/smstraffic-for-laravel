@@ -2,6 +2,10 @@
 
 return [
 
+    'main_url' => env('SMSTRAFFIC_MAIN_URL', 'https://sds.smstraffic.by/smartdelivery-in/multi.php'),
+
+    'backup_url' => env('SMSTRAFFIC_BACKUP_URL', 'https://sds2.smstraffic.by/smartdelivery-in/multi.php'),
+
     /*
     |--------------------------------------------------------------------------
     | SMS "From" Number

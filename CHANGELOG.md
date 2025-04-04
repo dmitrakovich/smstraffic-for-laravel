@@ -1,5 +1,9 @@
 # Release Notes
 
+## 0.4.0 (2025-04-05)
+
+* Update main & backup addresses. Add main & backup addresses to config.
+
 ## 0.3.0 (2025-03-12)
 
 * Laravel 12.x Support

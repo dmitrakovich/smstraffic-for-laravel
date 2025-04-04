@@ -10,16 +10,6 @@ class SmsTraffic
     /**
      *
      */
-    protected const MAIN_URL = 'https://sds.smstraffic.ru/smartdelivery-in/multi.php';
-
-    /**
-     *
-     */
-    protected const BACKUP_URL = 'https://sds2.smstraffic.ru/smartdelivery-in/multi.php';
-
-    /**
-     *
-     */
     protected const KNOWN_OPTIONS = [
         'originator' => '',
         'rus' => 0,
@@ -57,8 +47,12 @@ class SmsTraffic
     /**
      * Create a new SmsTraffic instance.
      */
-    public function __construct(protected string $login, protected string $password)
-    {
+    public function __construct(
+        protected string $login,
+        protected string $password,
+        protected string $mainUrl,
+        protected string $backupUrl,
+    ) {
     }
 
     /**
@@ -161,7 +155,7 @@ class SmsTraffic
      */
     protected function getResponse(\GuzzleHttp\Client $client, array $params, bool $useBackupUrl = false): SmsTrafficResponse
     {
-        $url = $useBackupUrl ? self::BACKUP_URL : self::MAIN_URL;
+        $url = $useBackupUrl ? $this->backupUrl : $this->mainUrl;
 
         try {
             $response = $client->post($url, $params);

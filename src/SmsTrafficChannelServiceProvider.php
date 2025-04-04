@@ -20,7 +20,12 @@ class SmsTrafficChannelServiceProvider extends ServiceProvider
 
         $this->app->singleton(SmsTraffic::class, function ($app) {
             $config = $app['config']['smstraffic'];
-            $client = new SmsTraffic($config['login'], $config['password']);
+            $client = new SmsTraffic(
+                $config['login'],
+                $config['password'],
+                $config['main_url'],
+                $config['backup_url']
+            );
 
             if (!empty($config['sms_from'])) {
                 $client->setDefaultOption('originator', $config['sms_from']);
