@@ -10,7 +10,17 @@ class SmsTrafficResponseFactory
     public static function createResponse(string $rawResponseData): SmsTrafficResponse
     {
         try {
-            return self::createSuccessResponse(new \SimpleXMLElement($rawResponseData));
+            $data = new \SimpleXMLElement($rawResponseData);
+
+            if (self::isApiErrorResponse($data)) {
+                return new SmsTrafficErrorResponse($data);
+            }
+
+            if (self::isStatusResponse($data)) {
+                return self::createStatusCollectionResponse($data);
+            }
+
+            return self::createSuccessResponse($data);
         } catch (\Throwable $th) {
             return self::createErrorResponse($th->getMessage());
         }
@@ -25,14 +35,58 @@ class SmsTrafficResponseFactory
     }
 
     /**
+     * Create a new SmsTrafficStatusCollectionResponse instance.
+     */
+    public static function createStatusCollectionResponse(\SimpleXMLElement $data): SmsTrafficStatusCollectionResponse
+    {
+        $statuses = [];
+
+        if (isset($data->sms)) {
+            foreach ($data->sms as $sms) {
+                $statuses[] = SmsTrafficStatusResponse::fromXml($sms);
+            }
+        } else {
+            $statuses[] = SmsTrafficStatusResponse::fromXml($data);
+        }
+
+        return new SmsTrafficStatusCollectionResponse($statuses, $data);
+    }
+
+    /**
      * Create a new SmsTrafficErrorResponse instance.
      */
     public static function createErrorResponse(string $errorMessage): SmsTrafficErrorResponse
     {
-        return new SmsTrafficErrorResponse((object)[
+        return new SmsTrafficErrorResponse((object) [
             'code' => SmsTrafficResponse::BAD_RESPONSE_ERROR_CODE,
             'description' => $errorMessage,
             'result' => SmsTrafficResponse::RESULT_ERROR,
         ]);
+    }
+
+    protected static function isApiErrorResponse(\SimpleXMLElement $data): bool
+    {
+        $result = (string) ($data->result ?? '');
+
+        if ($result === SmsTrafficResponse::RESULT_ERROR) {
+            return true;
+        }
+
+        $code = intval($data->code ?? 0);
+
+        return $code > 0 && ! self::isStatusResponse($data);
+    }
+
+    protected static function isStatusResponse(\SimpleXMLElement $data): bool
+    {
+        if (isset($data->message_infos)) {
+            return false;
+        }
+
+        if (isset($data->sms)) {
+            return true;
+        }
+
+        return isset($data->status) || isset($data->sms_id);
     }
 }

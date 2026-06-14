@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<reply>
+  <sms>
+    <error>no such message or this message does not belong to you</error>
+    <submition_date></submition_date>
+    <send_date></send_date>
+    <last_status_change_date></last_status_change_date>
+    <sms_id>9999999999</sms_id>
+    <status></status>
+  </sms>
+</reply>

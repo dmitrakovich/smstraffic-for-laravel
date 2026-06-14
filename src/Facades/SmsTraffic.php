@@ -8,6 +8,7 @@ use Illuminate\Notifications\Client\SmsTraffic as SmsTrafficClient;
 
 /**
  * @method static SmsTrafficResponse send(string $to, string $message, array $options = [])
+ * @method static SmsTrafficResponse status(string|array $smsIds)
  *
  * @see \Illuminate\Notifications\Client\SmsTraffic
  */

@@ -1,5 +1,11 @@
 # Release Notes
 
+## 0.5.0 (2026-06-14)
+
+* Implement `status()` API with support for up to 15 `sms_id` values per request.
+* Add status response classes (`SmsTrafficStatusResponse`, `SmsTrafficStatusCollectionResponse`).
+* Add unit tests for status XML parsing.
+
 ## 0.4.0 (2025-04-05)
 
 * Update main & backup addresses. Add main & backup addresses to config.

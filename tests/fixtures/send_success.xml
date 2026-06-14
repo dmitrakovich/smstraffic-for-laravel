@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<reply>
+  <result>OK</result>
+  <code>0</code>
+  <description>success</description>
+  <message_infos>
+    <message_info>
+      <phone>375291234567</phone>
+      <sms_id>13844748821563942605296525281335443643</sms_id>
+    </message_info>
+  </message_infos>
+</reply>

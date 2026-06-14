@@ -2,6 +2,7 @@
 
 namespace Illuminate\Notifications\Client;
 
+use Illuminate\Notifications\Client\Exceptions\TooManySmsIdsException;
 use Illuminate\Notifications\Client\Response\SmsTrafficResponse;
 use Illuminate\Notifications\Client\Response\SmsTrafficResponseFactory;
 
@@ -95,16 +96,53 @@ class SmsTraffic
     }
 
     /**
-     * Get message status.
+     * Get delivery status for one or more messages.
      *
-     * @todo complete in the future
+     * @param  string|list<string>  $smsIds
+     *
+     * @throws TooManySmsIdsException
+     * @throws \InvalidArgumentException
      */
-    public function status(string $smsId)
+    public function status(string|array $smsIds): SmsTrafficResponse
     {
         $payload = [
             'operation' => 'status',
-            'sms_id' => $smsId,
+            'sms_id' => implode(',', $this->normalizeSmsIds($smsIds)),
         ];
+
+        return $this->request($payload);
+    }
+
+    /**
+     * Normalize sms_id values for a status request.
+     *
+     * @param  string|list<string>  $smsIds
+     *
+     * @return list<string>
+     *
+     * @throws TooManySmsIdsException
+     * @throws \InvalidArgumentException
+     */
+    protected function normalizeSmsIds(string|array $smsIds): array
+    {
+        if (is_string($smsIds)) {
+            $smsIds = [$smsIds];
+        }
+
+        $smsIds = array_values(array_filter(array_map(
+            static fn (mixed $smsId): string => trim((string) $smsId),
+            $smsIds,
+        )));
+
+        if ($smsIds === []) {
+            throw new \InvalidArgumentException('At least one sms_id is required.');
+        }
+
+        if (count($smsIds) > TooManySmsIdsException::MAX_SMS_IDS) {
+            throw new TooManySmsIdsException(count($smsIds));
+        }
+
+        return $smsIds;
     }
 
     /**

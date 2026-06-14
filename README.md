@@ -103,6 +103,38 @@ Alternatively, you may send notifications via the `\Illuminate\Notifications\Fac
 ```php
 SmsTraffic::send($phones, $message);
 ```
+
+### Checking Delivery Status
+
+You can poll delivery status for previously sent messages using `status()`. Pass a single `sms_id` or an array of up to **15** identifiers per request (comma-separated in the API). Identifiers are always handled as strings — do not cast them to integers.
+
+```php
+use Illuminate\Notifications\Client\Response\SmsTrafficStatusCollectionResponse;
+use Illuminate\Notifications\Facades\SmsTraffic;
+
+$response = SmsTraffic::status('13844748821563942605296525281335443643');
+
+if ($response instanceof SmsTrafficStatusCollectionResponse) {
+    foreach ($response->getStatuses() as $status) {
+        $status->getSmsId();
+        $status->getStatus(); // Delivered, Expired, Non Delivered, Buffered SMSC, ...
+        $status->getSubmissionDate();
+        $status->getSendDate();
+        $status->getLastStatusChangeDate();
+        $status->getError(); // per-message error, if any
+    }
+}
+
+// Multiple ids (max 15)
+$response = SmsTraffic::status([
+    '8287713301',
+    '8287713302',
+]);
+```
+
+Status information is retained by the provider for approximately **2 days**. Final delivery statuses include: `Delivered`, `Non Delivered`, `Rejected`, `Expired`, `Deleted`, and `Unknown status`.
+
+If more than 15 ids are passed, `TooManySmsIdsException` is thrown before any HTTP request is made.
 ## Official Documentation
 
 Documentation for Laravel Vonage Notification Channel can be found on the [Laravel website](https://laravel.com/docs/notifications#sms-notifications).
