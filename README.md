@@ -106,22 +106,36 @@ SmsTraffic::send($phones, $message);
 
 ### Checking Delivery Status
 
-You can poll delivery status for previously sent messages using `status()`. Pass a single `sms_id` or an array of up to **15** identifiers per request (comma-separated in the API). Identifiers are always handled as strings — do not cast them to integers.
+You can poll delivery status for previously sent messages using `status()`. Pass a single message id or an array of up to **15** identifiers per request (comma-separated in the API). Identifiers are always handled as strings — do not cast them to integers.
+
+The library supports two XML response formats:
+
+| | Classic RU API | Smart Delivery BY |
+|---|---|---|
+| Default URLs | `api.smstraffic.ru` | `sds.smstraffic.by/smartdelivery-in/multi.php` |
+| Message id | `sms_id` | `msg-info/id` |
+| Status values | `Delivered`, `Expired`, … | `READ`, `DELIVERED`, … |
+| Channel | — | `msg-info/channel-info/channel` (`viber`, `sms`, …) |
+| Batch | `<sms>` elements | `<msg-infos>` / multiple `<msg-info>` |
 
 ```php
 use Illuminate\Notifications\Client\Response\SmsTrafficStatusCollectionResponse;
 use Illuminate\Notifications\Facades\SmsTraffic;
 
-$response = SmsTraffic::status('13844748821563942605296525281335443643');
+$response = SmsTraffic::status('165314138129206752561536268436567490747');
 
 if ($response instanceof SmsTrafficStatusCollectionResponse) {
     foreach ($response->getStatuses() as $status) {
         $status->getSmsId();
-        $status->getStatus(); // Delivered, Expired, Non Delivered, Buffered SMSC, ...
+        $status->getStatus(); // Delivered, READ, DELIVERED, ...
+        $status->getChannel(); // viber, sms, ... (Smart Delivery only)
+        $status->getDeliveryDate();
+        $status->getReadDate();
         $status->getSubmissionDate();
         $status->getSendDate();
         $status->getLastStatusChangeDate();
         $status->getError(); // per-message error, if any
+        $status->isFinal(); // true for terminal statuses
     }
 }
 
@@ -132,7 +146,12 @@ $response = SmsTraffic::status([
 ]);
 ```
 
-Status information is retained by the provider for approximately **2 days**. Final delivery statuses include: `Delivered`, `Non Delivered`, `Rejected`, `Expired`, `Deleted`, and `Unknown status`.
+Status information is retained by the provider for approximately **2 days**. Final statuses include:
+
+- Classic: `Delivered`, `Non Delivered`, `Rejected`, `Expired`, `Deleted`, `Unknown status`
+- Smart Delivery: `READ`, `DELIVERED`, `EXPIRED`, `REJECTED`, `DELETED`, `FAILED`, `UNDELIVERED`
+
+Use `SmsTrafficStatusResponse::finalStatuses()` for the full combined list.
 
 If more than 15 ids are passed, `TooManySmsIdsException` is thrown before any HTTP request is made.
 ## Official Documentation

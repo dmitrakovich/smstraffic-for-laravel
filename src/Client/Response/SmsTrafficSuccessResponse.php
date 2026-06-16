@@ -17,6 +17,20 @@ class SmsTrafficSuccessResponse extends SmsTrafficResponse
      */
     public function getSmsId(): ?string
     {
-        return (string)$this->data->message_infos?->message_info?->sms_id ?: null;
+        $classic = (string) ($this->data->message_infos?->message_info?->sms_id ?? '');
+
+        if ($classic !== '') {
+            return $classic;
+        }
+
+        $smartFromMessageInfos = (string) ($this->data->message_infos?->message_info?->id ?? '');
+
+        if ($smartFromMessageInfos !== '') {
+            return $smartFromMessageInfos;
+        }
+
+        $smart = (string) ($this->data->{'msg-info'}?->id ?? '');
+
+        return $smart !== '' ? $smart : null;
     }
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<reply>
+  <result>OK</result>
+  <code>0</code>
+  <msg-info>
+    <id>165314138129206752561536268436567490747</id>
+    <submition_date>2026-06-14 23:41:57</submition_date>
+    <last_update_status>2026-06-14 23:42:13</last_update_status>
+    <status>READ</status>
+    <channel-info>
+      <channel>viber</channel>
+      <sent_date>2026-06-14 23:41:57</sent_date>
+      <delivery_date>2026-06-14 23:42:02</delivery_date>
+      <read_date>2026-06-14 23:42:08</read_date>
+      <status>READ</status>
+      <parts_count>1</parts_count>
+      <parts_dlv_count>1</parts_dlv_count>
+    </channel-info>
+  </msg-info>
+</reply>

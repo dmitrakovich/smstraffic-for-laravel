@@ -45,6 +45,14 @@ class SmsTrafficResponseFactory
             foreach ($data->sms as $sms) {
                 $statuses[] = SmsTrafficStatusResponse::fromXml($sms);
             }
+        } elseif (isset($data->{'msg-infos'})) {
+            foreach ($data->{'msg-infos'}->{'msg-info'} as $msgInfo) {
+                $statuses[] = SmsTrafficStatusResponse::fromXml($msgInfo);
+            }
+        } elseif (isset($data->{'msg-info'})) {
+            foreach ($data->{'msg-info'} as $msgInfo) {
+                $statuses[] = SmsTrafficStatusResponse::fromXml($msgInfo);
+            }
         } else {
             $statuses[] = SmsTrafficStatusResponse::fromXml($data);
         }
@@ -84,6 +92,10 @@ class SmsTrafficResponseFactory
         }
 
         if (isset($data->sms)) {
+            return true;
+        }
+
+        if (isset($data->{'msg-info'}) || isset($data->{'msg-infos'})) {
             return true;
         }
 

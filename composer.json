@@ -1,5 +1,5 @@
 {
-    "version": "0.5.0",
+    "version": "0.6.0",
     "name": "dmitrakovich/smstraffic-for-laravel",
     "description": "SmsTraffic Client for Laravel",
     "type": "library",

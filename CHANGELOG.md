@@ -1,5 +1,11 @@
 # Release Notes
 
+## 0.6.0 (2026-06-14)
+
+* Add Smart Delivery BY XML support for `status()` responses (`msg-info`, `channel-info`).
+* Extend `SmsTrafficStatusResponse` with channel, delivery/read dates, and `isFinal()`.
+* Support Smart Delivery message ids in `SmsTrafficSuccessResponse::getSmsId()`.
+
 ## 0.5.0 (2026-06-14)
 
 * Implement `status()` API with support for up to 15 `sms_id` values per request.
